@@ -74,24 +74,11 @@ def getIout(Icp, LD, means):
 
 
 def get_eval(Iin, BL, LD, Icp, Iout):
-    Bin, Gin, Rin = cv2.split(Iin)
-    Yin, _, _ = rgbToyuv(Rin, Gin, Bin)
-
-    Bcp, Gcp, Rcp = cv2.split(Icp)
-    Ycp, _, _ = rgbToyuv(Rcp, Gcp, Bcp)
-
-    Bout, Gout, Rout = cv2.split(Iout)
-    Yout, _, _ = rgbToyuv(Rout, Gout, Bout)
-
     psnr = get_PSNR(Iin, Iout)
     ssim = get_SSIM(Iin, Iout)
     # mi = get_MI(Iin, Yout)                  # TODO
     cd = get_CD(Iin, Iout)
-    cr_in, cr_cp, cr_ld, cr_out, cr_out1 = get_CR(Yin, LD, Ycp, Yout)
-    psnr, ssim, cd, cr_in, cr_cp, cr_ld, cr_out, cr_out1 = round(psnr, 2), round(ssim, 2), round(cd, 2),\
-                                                           round(cr_in, 2), \
-                                                           round(cr_cp, 2), round(cr_ld, 2), round(cr_out, 2), \
-                                                           round(cr_out1, 2)
+    cr_in, cr_cp, cr_ld, cr_out, cr_out1 = get_CR(Iin, LD, Icp, Iout)
     return psnr, ssim, cd, cr_in, cr_cp, cr_ld, cr_out, cr_out1
 
 

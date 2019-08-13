@@ -12,8 +12,11 @@ def getIcp_linear(Iin, LD):
     # LD_max = np.max(LD)
     LD_max = 255.0
 
+    try:
+        K = LD_max / LD
+    except:
+        K = 0
 
-    K = np.where(LD==0.0, 0.0, LD_max / LD)
     Y1 = K * Y
     U1 = K * (U - 128) + 128
     V1 = K * (V - 128) + 128
@@ -28,7 +31,11 @@ def getIcp_unlinear(Iin, LD):
     # LD_max = np.max(LD)
     LD_max = 255.0
     r = 2.2
-    K = np.where(LD==0.0, 0.0, (LD_max / LD) ** (1 / r))
+    try:
+        K = (LD_max / LD) ** (1 / r)
+    except:
+        K = 0      ##TODO
+
     Y1 = K * Y
     U1 = K * (U - 128) + 128
     V1 = K * (V - 128) + 128
@@ -52,8 +59,12 @@ def getIcp_2steps(Iin, LD):
     ## enhance diaplay quality
     K2 = (LD / LD_max) ** (1.0/gamma)
     Y2 = Y1 * np.log10(1 + Y * K2)
+    Y2 = np.where(Y2 > 255.0, 255.0, Y2)
 
-    K = np.where(Y1!=0.0, Y2/Y1, Y2/(Y1+0.00001))
+    try:
+        K = Y2 / Y
+    except:
+        K = 1
 
     U2 = K * (U - 128) + 128
     V2 = K * (V - 128) + 128

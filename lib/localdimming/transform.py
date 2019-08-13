@@ -73,8 +73,8 @@ def xyzTolab(X, Y, Z):
     Yn = 100.0
     Zn = 108.883
 
-    X1 = Y / Yn
-    Y1 = X / Xn
+    X1 = X / Xn
+    Y1 = Y / Yn
     Z1 = Z / Zn
 
     Xf = np.where(X1 > v2, X1 ** v1, v1 * v3 * X1 + v4)

@@ -71,6 +71,7 @@ class DIV2K(Dataset):
             print_str = 'Index: [{0}]  '.format(name)
             print_str += 'PSNR: {0}  '.format(psnr)
             print_str += 'SSIM: {0}  '.format(ssim)
+            print_str += 'CD: {0}\t'.format(cd)
             print_str += 'CR_in: {0}\t'.format(cr_in)
             print_str += 'CR_cp: {0}\t'.format(cr_cp)
             print_str += 'CR_ld: {0}\t'.format(cr_ld)

@@ -40,9 +40,9 @@ class Configuration():
         self.TRAIN_CKPT_DIR = os.path.join(self.EXP, 'checkpoints', self.DATE)
 
         self.TEST_BZ = 1
-        # self.TEST_CKPT ='/home/wangyf/codes/LD-spnn/checkpoints/unet_up/last_mse.pth',                     # mse
-        # self.TEST_CKPT = '/home/wangyf/codes/LD-spnn/checkpoints/unet_up/last_ssim+mse.pth'                # ssim
-        self.TEST_CKPT = '/home/wangyf/codes/LD-spnn/checkpoints/edsr/last_ssim+mse.pth'                   # ssim+mse
+        # self.TEST_CKPT ='~/checkpoints/unet_up/last_mse.pth',                     # mse
+        # self.TEST_CKPT = '~/checkpoints/unet_up/last_ssim+mse.pth'                # ssim
+        self.TEST_CKPT = '~/checkpoints/edsr/last_ssim+mse.pth'                   # ssim+mse
 
 
         self.LD_SAVE_DIR = os.path.join(self.EXP, 'output', self.DATE, 'LD')

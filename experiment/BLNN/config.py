@@ -10,7 +10,7 @@ class Configuration():
 
         self.GPU = True
         self.GPU_ID = '2'
-        self.PERIOD = 'train'
+        self.PERIOD = 'test'
 
         self.BL = 'unet_down'
         self.LD = 'bma'
@@ -33,14 +33,15 @@ class Configuration():
 
         self.TRAIN_LR = 0.0001
         self.TRAIN_BZ = 2
-        self.TRAIN_EPOCHS = 50
+        self.TRAIN_EPOCHS = 20
         self.TRAIN_TBLOG = True
-        self.TRAIN_CKPT = ''
-        self.TRAIN_LOG_DIR = os.path.join(self.EXP, 'log', self.DATE)
-        self.TRAIN_CKPT_DIR = os.path.join(self.EXP, 'checkpoints', self.DATE)
+        # self.TRAIN_CKPT = '/home/wangyf/codes/Local-Dimming-PyTorch/experiment/BLNN/unet_down-bma-unlinear-LINEAR-ssim+mse/checkpoints/2019-08-13-14-24/29_itr36000.pth'
+        self.TRAIN_CKPT = '/home/wangyf/codes/Local-Dimming-PyTorch/experiment/BLNN/unet_down-bma-unlinear-LINEAR-ssim+mse/2019-08-14-15-17/checkpoints/3_itr4800.pth'
+        self.TRAIN_LOG_DIR = os.path.join(self.EXP,  self.DATE, 'log',)
+        self.TRAIN_CKPT_DIR = os.path.join(self.EXP, self.DATE, 'checkpoints')
 
         self.TEST_BZ = 1
-        self.TEST_CKPT = ''
+        self.TEST_CKPT = '/home/wangyf/codes/Local-Dimming-PyTorch/experiment/BLNN/unet_down-bma-unlinear-LINEAR-ssim+mse/2019-08-15-10-18/checkpoints/19_itr24000.pth'
 
         self.BL_SAVE_DIR = os.path.join(self.EXP, 'output', self.DATE, 'BL')
         self.LD_SAVE_DIR = os.path.join(self.EXP, 'output', self.DATE, 'LD')
@@ -58,7 +59,7 @@ class Configuration():
                 os.makedirs((self.TRAIN_LOG_DIR))
             if not os.path.isdir(self.TRAIN_CKPT_DIR):
                 os.makedirs((self.TRAIN_CKPT_DIR))
-            self.TRAIN_RECORD_FILE = open(os.path.join(self.EXP, 'log', self.DATE, 'record.txt'), 'w')
+            self.TRAIN_RECORD_FILE = open(os.path.join(self.EXP, self.DATE, 'log', 'record.txt'), 'w')
         else:
             if not os.path.isdir(self.BL_SAVE_DIR):
                 os.makedirs((self.BL_SAVE_DIR))

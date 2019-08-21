@@ -57,7 +57,6 @@ def train_net(args, net):
             Iin = Iin_transform.cuda()                          # torch.float32, [0.0-1.0]
             BL = net(Iin)                                       # torch.float32, [0.0-1.0]
             Iouts = []
-            ipdb.set_trace()
             for idx in range(BL.shape[0]):
                 LD = getLD(BL.squeeze(1)[idx] * 255, np.zeros((cfg.DATA_SIZE)), cfg.LD)
                 Icp = getIcp(Iin_transform[idx].numpy().transpose((1, 2, 0)) * 255, LD, cfg.CP)     # HWC

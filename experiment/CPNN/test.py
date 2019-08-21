@@ -73,8 +73,12 @@ def test_net(cfg, net):
             ## 打印到文件
             log_print(print_str, cfg.TEST_RECORD_FILE, color="blue", attrs=["bold"])
 
-    print(psnrs / num, ssims / num, cds / num,  cr_ins / num, cr_cps / num, cr_lds / num, cr_outs / num, cr_out1s / num)
-    print(psnrs / num, ssims / num, cds / num,  cr_ins / num, cr_cps / num, cr_lds / num, cr_outs / num, cr_out1s / num,
+    print(round(psnrs / num, 2), round(ssims / num, 2), round(cds / num, 2),
+          round(cr_ins / num, 2), round(cr_cps / num, 2), round(cr_lds / num, 2), round(cr_outs / num, 2),
+          round(cr_out1s / num, 2))
+    print(round(psnrs / num, 2), round(ssims / num, 2), round(cds / num, 2),
+          round(cr_ins / num, 2), round(cr_cps / num, 2), round(cr_lds / num, 2), round(cr_outs / num, 2),
+          round(cr_out1s / num, 2),
           file=cfg.TEST_RECORD_FILE)
 
 

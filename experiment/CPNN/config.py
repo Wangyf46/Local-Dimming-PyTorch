@@ -36,8 +36,8 @@ class Configuration():
         self.TRAIN_EPOCHS = 50
         self.TRAIN_TBLOG = True
         self.TRAIN_CKPT = ''
-        self.TRAIN_LOG_DIR = os.path.join(self.EXP, 'log', self.DATE)
-        self.TRAIN_CKPT_DIR = os.path.join(self.EXP, 'checkpoints', self.DATE)
+        self.TRAIN_LOG_DIR = os.path.join(self.EXP, self.DATE, 'log')
+        self.TRAIN_CKPT_DIR = os.path.join(self.EXP, self.DATE, 'checkpoints')
 
         self.TEST_BZ = 1
         # self.TEST_CKPT = '~/checkpoints/last_mse.pth'     # mse
@@ -58,7 +58,7 @@ class Configuration():
                 os.makedirs((self.TRAIN_LOG_DIR))
             if not os.path.isdir(self.TRAIN_CKPT_DIR):
                 os.makedirs((self.TRAIN_CKPT_DIR))
-            self.TRAIN_RECORD_FILE = open(os.path.join(self.EXP, 'log', self.DATE, 'record.txt'), 'w')
+            self.TRAIN_RECORD_FILE = open(os.path.join(self.EXP, self.DATE, 'log', 'record.txt'), 'w')
         else:
             if not os.path.isdir(self.LD_SAVE_DIR):
                 os.makedirs((self.LD_SAVE_DIR))
@@ -66,7 +66,7 @@ class Configuration():
                 os.makedirs((self.Icp_SAVE_DIR))
             if not os.path.isdir(self.Iout_SAVE_DIR):
                 os.makedirs((self.Iout_SAVE_DIR))
-            self.TEST_RECORD_FILE = open(os.path.join(self.EXP, 'output', self.DATE, 'record.txt'), 'w')
+            self.TEST_RECORD_FILE = open(os.path.join(self.EXP, self.DATE, 'output', 'record.txt'), 'w')
 
     def __add_path(self, path):
         if path not in sys.path:

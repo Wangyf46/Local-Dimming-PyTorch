@@ -1,5 +1,3 @@
-import cv2
-import ipdb
 from termcolor import cprint
 
 

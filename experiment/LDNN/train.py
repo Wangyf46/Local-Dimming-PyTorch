@@ -5,6 +5,7 @@ import ipdb
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from tensorboardX import SummaryWriter
 
@@ -12,7 +13,7 @@ from config import cfg
 from DIV2K import DIV2K
 from lib.loss.loss import *
 from lib.utils import *
-
+from lib.localdimming.common import *
 
 
 def train_net(cfg, net):
@@ -24,6 +25,7 @@ def train_net(cfg, net):
     train_loader = DataLoader(listDataset,
                               batch_size=cfg.TRAIN_BZ,
                               shuffle=True,
+                              num_workers=4,
                               pin_memory=True)
 
     optimizer = optim.Adam(net.parameters(),
@@ -39,29 +41,27 @@ def train_net(cfg, net):
     itr = 0
     max_itr = cfg.TRAIN_EPOCHS * len(train_loader)
     print(itr, max_itr, len(train_loader))
+    torch.cuda.empty_cache()
     net.train()
     for epoch in range(cfg.TRAIN_EPOCHS):
         print('Starting epoch {}/{}.'.format(epoch + 1, cfg.TRAIN_EPOCHS))
-
         data_time = AverageMeter()
         batch_time = AverageMeter()
         losses = AverageMeter()
-
         end = time.time()
-
-        for i_batch, (Iin_transform, Icp_transform, BL_transform, name) in enumerate(train_loader):
+        for  i_batch, blob in enumerate(train_loader):
             data_time.update(time.time() - end)                 # measure batch_size data loading time
             now_lr = adjust_lr(optimizer, epoch, cfg.TRAIN_LR)
+            LDs = net(blob['BL'].unsqueeze(1).cuda())                         # torch.float32-[0.0-1.0]
+            Iouts_list = []
+            for idx in range(cfg.TRAIN_BZ):
+                LD = LDs[idx].detach().cpu().numpy().squeeze(0) * 255
+                Icp = getIcp(blob['Iin'][idx].numpy().transpose((1, 2, 0)), LD, cfg.CP)  # HWC
+                Iout = getIout(Icp, LD, cfg.DISPLAY).transpose((2, 0, 1))                # CHW
+                Iouts_list.append(Iout)
+            Iouts = Variable(torch.from_numpy(np.array(Iouts_list)), requires_grad=True)
 
-            Iin = Iin_transform.cuda()                          # torch.float32, [0.0-255.0]
-            Icp = Icp_transform.cuda()                          # torch.float32, [0.0-255.0]
-            BL = BL_transform.unsqueeze(1).cuda()               # torch.float32-[0.0-1.0]
-
-            LD = net(BL)                                        # torch.float32-[0.0-1.0]
-
-            Iout = Icp * LD / 255.0                             # torch.float32-[0.0-1.0]
-
-            loss = criterion(Iout, Iin / 255.0)
+            loss = criterion(Iouts.cuda() / 255.0, blob['Iin'].cuda() / 255.0)
             losses.update(loss.item(), cfg.TRAIN_BZ)
             optimizer.zero_grad()
             loss.backward()

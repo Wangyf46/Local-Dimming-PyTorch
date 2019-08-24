@@ -13,8 +13,8 @@ class Configuration():
         self.PERIOD = 'train'
 
         self.BL = 'lut'
-        self.LD = 'unet_up'
-        self.CP = 'unet'
+        self.LD = 'edsr'
+        self.CP = 'unlinear'
         self.DISPLAY = 'LINEAR'  ## TODO
         # self.LOSS = 'mse'
         self.LOSS = 'ssim+mse'
@@ -25,6 +25,7 @@ class Configuration():
         self.SAVE = True
         self.EVAL = True
 
+        self.Pre_Load = False
         self.DATA_NAME = 'DIV2K'
         self.DATA_PATH = '/home/wangyf/datasets/DIV2K'
         self.DATA_SIZE = [1080, 1920]
@@ -32,7 +33,7 @@ class Configuration():
         self.DATA_AUG = True
 
         self.TRAIN_LR = 0.0001
-        self.TRAIN_BZ = 2
+        self.TRAIN_BZ = 4
         self.TRAIN_EPOCHS = 50
         self.TRAIN_TBLOG = True
         self.TRAIN_CKPT = ''
@@ -40,10 +41,9 @@ class Configuration():
         self.TRAIN_CKPT_DIR = os.path.join(self.EXP, self.DATE, 'checkpoints')
 
         self.TEST_BZ = 1
-        # self.TEST_CKPT ='~/checkpoints/unet_up/last_mse.pth',                     # mse
-        # self.TEST_CKPT = '~/checkpoints/unet_up/last_ssim+mse.pth'                # ssim
-        self.TEST_CKPT = '~/checkpoints/edsr/last_ssim+mse.pth'                   # ssim+mse
-
+        # self.TEST_CKPT ='checkpoints/unet_up/last_mse.pth'                        # mse
+        # self.TEST_CKPT = 'checkpoints/unet_up/last_ssim+mse.pth'                # ssim
+        self.TEST_CKPT = 'checkpoints/edsr/last_ssim+mse.pth'                   # ssim+mse
 
         self.LD_SAVE_DIR = os.path.join(self.EXP, 'output', self.DATE, 'LD')
         self.Icp_SAVE_DIR = os.path.join(self.EXP, 'output', self.DATE, 'Icp')
@@ -68,7 +68,7 @@ class Configuration():
                 os.makedirs((self.Icp_SAVE_DIR))
             if not os.path.isdir(self.Iout_SAVE_DIR):
                 os.makedirs((self.Iout_SAVE_DIR))
-            self.TEST_RECORD_FILE = open(os.path.join(self.EXP, self.DATE, 'output', 'record.txt'), 'w')
+            self.TEST_RECORD_FILE = open(os.path.join(self.EXP, 'output', self.DATE, 'record.txt'), 'w')
 
     def __add_path(self, path):
         if path not in sys.path:

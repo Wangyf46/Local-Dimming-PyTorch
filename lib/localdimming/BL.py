@@ -47,8 +47,6 @@ def getBL_otsu(block):
 
 
 
-
-
 def getBL_grayEntroy(block):
     block = np.uint8(block)
     I_avg, I_min, I_max = np.mean(block), np.min(block), np.max(block)

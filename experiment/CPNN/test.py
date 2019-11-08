@@ -91,8 +91,11 @@ if __name__ == '__main__':
     if cfg.TEST_CKPT:
         net.load_state_dict(torch.load(cfg.TEST_CKPT))
         print('Model loaded from {}'.format(cfg.TEST_CKPT))
+        print(torch.load(cfg.TEST_CKPT))
+        ipdb.set_trace()
     if cfg.GPU:
         net.cuda()
+
 
 
     test_net(cfg, net)

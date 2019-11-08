@@ -79,8 +79,8 @@ class DIV2K(Dataset):
             Iin_file =  os.path.join(self.Iin_dir, name)
             Iin = cv2.imread(Iin_file).astype('float32')  # HWC
 
-            # Icp_file = os.path.join(self.Icp_dir, name)
-            # Icp = cv2.imread(Icp_file).astype('float32')       # HWC-[0,255]-
+            Icp_file = os.path.join(self.Icp_dir, name)
+            Icp = cv2.imread(Icp_file).astype('float32')       # HWC-[0,255]-
 
             ## gray: maximum grayscale processing
             gray = np.zeros(self.cfg.DATA_SIZE, dtype='float32')
@@ -104,7 +104,7 @@ class DIV2K(Dataset):
             blob['fname'] = name
             blob['Iin'] = Iin.transpose((2, 0, 1))      # CHW
             blob['BL'] = BL / 255.0
-            # blob['Icp'] = Icp.transpose((2, 0, 1))
+            blob['Icp'] = Icp.transpose((2, 0, 1))
             return blob
 
 

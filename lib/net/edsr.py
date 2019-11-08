@@ -112,7 +112,7 @@ if __name__ == '__main__':
     input = torch.rand(8, 1, 9, 16).cuda()    # bz = 1
     net = EDSR(1, 1).cuda()
 
-    print(net)
+    #print(net)
     output = net(input)
     print(output.shape)
     ipdb.set_trace()

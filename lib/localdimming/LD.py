@@ -6,7 +6,7 @@ def getLD_interpolation(BL_init, gray):
     H, W = gray.shape
     h, w = BL_init.shape
     m, n = H/h, W/w
-    LD = np.zeros([H, W], dtype='float32')
+    LD = np.zeros([H, W], dtype='float64')
     for i in range(h):
         x1 = int(m * i)
         x2 = int(m * (i + 1))

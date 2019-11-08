@@ -16,6 +16,7 @@ def get_PSNR(target, ref):
     return round(PSNR, 2)
 
 
+
 def get_SSIM(target, ref):
     # numpy->PIL
     target = Image.fromarray(cv2.cvtColor(target.astype('uint8'), cv2.COLOR_BGR2RGB))
@@ -80,23 +81,16 @@ def get_CR(Iin, LD, Icp, Iout):
 
     ## Iin
     Hin_10, Hin_90 = get_H(Yin)
-    CR_in = Hin_90 / (Hin_10)
+    CR_in = Hin_90 / Hin_10
 
     # Icp
-    try:
-        CR_ld = (np.max(LD) / np.min(LD)).astype('float64')
-    except:
-        CR_ld = (np.max(LD) / 0.3 ).astype('float64')   ## TODO
-
-    # LD = getLD_transform(LD)           ## TODO
-
+    LD = np.where(LD==0.0,LD+1,LD)
     CR_ld = (np.max(LD) / np.min(LD)).astype('float64')
-    Hcp_10, Hcp_90 = get_H(Ycp)
-    CR_cp = Hcp_90 / (Hcp_10)
-    CR_out= CR_ld * CR_cp
 
-    ## Iout
+    Hcp_10, Hcp_90 = get_H(Ycp)
+    CR_cp = Hcp_90 / Hcp_10
+    CR_out= CR_ld * CR_cp
     Hout_10, Hout_90 = get_H(Yout)
-    CR_out1 = Hout_90 / (Hout_10)
+    CR_out1 = Hout_90 / Hout_10
 
     return round(CR_in, 2), round(CR_cp, 2), round(CR_ld, 2), round(CR_out, 2), round(CR_out1, 2)

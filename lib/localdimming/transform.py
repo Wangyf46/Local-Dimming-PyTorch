@@ -3,7 +3,7 @@ import numpy as np
 
 def getLD_transform(LD):
     H, W = LD.shape
-    LD_transform = np.zeros([H, W], dtype='float32')
+    LD_transform = np.zeros([H, W], dtype='float64')
     for i in range(H):
         for j in range(W):
             if (LD[i][j] >= 0.0) and (LD[i][j] < 8.0):

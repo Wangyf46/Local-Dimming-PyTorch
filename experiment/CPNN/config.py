@@ -41,7 +41,7 @@ class Configuration():
 
         self.TEST_BZ = 1
         # self.TEST_CKPT = '~/checkpoints/last_mse.pth'     # mse
-        self.TEST_CKPT = '~/checkpoints/last_ssim+mse.pth'  # mse+ssim
+        self.TEST_CKPT = 'checkpoints/last_ssim+mse.pth'  # mse+ssim
 
         self.LD_SAVE_DIR = os.path.join(self.EXP, 'output', self.DATE, 'LD')
         self.Icp_SAVE_DIR = os.path.join(self.EXP, 'output', self.DATE, 'Icp')
@@ -66,7 +66,7 @@ class Configuration():
                 os.makedirs((self.Icp_SAVE_DIR))
             if not os.path.isdir(self.Iout_SAVE_DIR):
                 os.makedirs((self.Iout_SAVE_DIR))
-            self.TEST_RECORD_FILE = open(os.path.join(self.EXP, self.DATE, 'output', 'record.txt'), 'w')
+            self.TEST_RECORD_FILE = open(os.path.join(self.EXP, 'output', self.DATE, 'record.txt'), 'w')
 
     def __add_path(self, path):
         if path not in sys.path:

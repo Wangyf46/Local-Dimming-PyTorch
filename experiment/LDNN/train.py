@@ -56,7 +56,9 @@ def train_net(cfg, net):
             Iouts_list = []
             for idx in range(cfg.TRAIN_BZ):
                 LD = LDs[idx].detach().cpu().numpy().squeeze(0) * 255
-                Icp = getIcp(blob['Iin'][idx].numpy().transpose((1, 2, 0)), LD, cfg.CP)  # HWC
+                #Icp = getIcp(blob['Iin'][idx].numpy().transpose((1, 2, 0)), LD, cfg.CP)  # HWC
+                Icp = blob['Icp'][idx].numpy().transpose((1,2,0))
+                #ipdb.set_trace()
                 Iout = getIout(Icp, LD, cfg.DISPLAY).transpose((2, 0, 1))                # CHW
                 Iouts_list.append(Iout)
             Iouts = Variable(torch.from_numpy(np.array(Iouts_list)), requires_grad=True)
@@ -93,11 +95,16 @@ if __name__ == '__main__':
     torch.manual_seed(0)
     torch.cuda.manual_seed(0)
 
-    from lib.net.edsr import EDSR
-    net = EDSR(1, 1)
+    # from lib.net.edsr import EDSR
+    # net = EDSR(1, 1)
 
     # from lib.net.unet_up import UNet_Upsampling
     # net = UNet_Upsampling(1, 1)
+
+    from lib.net.resnet import RESNET
+    os.environ['CUDA_VISIBLE_DEVICES'] = '0,2'
+    net = RESNET(1, 1)
+    net = nn.DataParallel(net)
 
     if cfg.TRAIN_CKPT:
         net.load_state_dict(torch.load(cfg.TRAIN_CKPT))
@@ -107,7 +114,7 @@ if __name__ == '__main__':
     try:
         train_net(cfg, net)
     except KeyboardInterrupt:
-        torch.save(net.state_dict(), cfg.EXP + 'INTERRUPTED.pth')
+        torch.save(net.state_dict(), cfg.EXP + '-INTERRUPTED.pth')
         print('Saved interrupt')
         try:
             sys.exit(0)

@@ -9,12 +9,12 @@ class Configuration():
         self.DATE = time.strftime("%Y-%m-%d-%H-%M", time.localtime())
 
         self.GPU = True
-        self.GPU_ID = '2'
-        self.PERIOD = 'train'
+        self.GPU_ID = '0,2'
+        self.PERIOD = 'test'
 
         self.BL = 'lut'
-        self.LD = 'edsr'
-        self.CP = 'unlinear'
+        self.LD = 'resnet'
+        self.CP = 'unet'
         self.DISPLAY = 'LINEAR'  ## TODO
         # self.LOSS = 'mse'
         self.LOSS = 'ssim+mse'
@@ -43,7 +43,11 @@ class Configuration():
         self.TEST_BZ = 1
         # self.TEST_CKPT ='checkpoints/unet_up/last_mse.pth'                        # mse
         # self.TEST_CKPT = 'checkpoints/unet_up/last_ssim+mse.pth'                # ssim
-        self.TEST_CKPT = 'checkpoints/edsr/last_ssim+mse.pth'                   # ssim+mse
+        # self.TEST_CKPT = 'checkpoints/edsr/last_ssim+mse.pth'                   # ssim+mse
+        # self.TEST_CKPT = 'lut-edsr-unlinear-LINEAR-ssim+mse/2019-08-23-19-11/checkpoints/40_itr24600.pth'
+        # self.TEST_CKPT ='/home/wangyf/codes/Local-Dimming-PyTorch/experiment/LDNN/lut-resnet-unlinear-LINEAR-ssim+mse/2019-10-14-23-08/checkpoints/35_itr21600.pth'
+        # self.TEST_CKPT = '/home/wangyf/codes/Local-Dimming-PyTorch/experiment/LDNN/lut-resnet-unlinear-LINEAR-ssim+mse/2019-10-14-23-08/checkpoints/49_itr30000.pth'
+        self.TEST_CKPT = '/home/wangyf/codes/Local-Dimming-PyTorch/experiment/LDNN/lut-resnet-unet-LINEAR-ssim+mse/2019-10-17-22-39/checkpoints/49_itr30000.pth'
 
         self.LD_SAVE_DIR = os.path.join(self.EXP, 'output', self.DATE, 'LD')
         self.Icp_SAVE_DIR = os.path.join(self.EXP, 'output', self.DATE, 'Icp')

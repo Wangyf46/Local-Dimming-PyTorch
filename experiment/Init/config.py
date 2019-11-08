@@ -14,7 +14,8 @@ class Configuration():
         self.LD = 'bma'
         self.CP = 'unlinear'
         self.DISPLAY = 'LINEAR'       ## TODO
-        self.EXP = self.BL + '-' + self.LD + '-' +self.CP + '-' + self.DISPLAY
+        # self.EXP = self.BL + '-' + self.LD + '-' +self.CP + '-' + self.DISPLAY
+        self.EXP = 'Zoo_36x66' + '-' + self.BL  + '-' + self.LD + '-' + self.CP + '-' + self.DISPLAY
 
         self.LD_TRANSFORMA = False
         self.VIS = False

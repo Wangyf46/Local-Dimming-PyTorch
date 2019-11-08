@@ -38,6 +38,7 @@ class UNet(nn.Module):
                 nn.init.constant_(m.bias, 0)
 
     def forward(self, x):          # torch.Size([1, 3, 1080, 1920])
+        ipdb.set_trace()
         x1 = self.inc(x)           # torch.Size([1, 64, 1080, 1920])
 
         x2 = self.down1(x1)        # torch.Size([1, 64, 216, 384])
@@ -198,8 +199,8 @@ class outconv(nn.Module):
 
 
 if __name__ == '__main__':
-    input = torch.rand(1, 3, 1080, 1920).cuda()  # bz = 1
-    LDNN = UNet(3, 3).cuda()
+    input = torch.rand(1, 3, 1080, 1920) # bz = 1
+    LDNN = UNet(3,3)
 
     print(LDNN)
     output = LDNN(input)

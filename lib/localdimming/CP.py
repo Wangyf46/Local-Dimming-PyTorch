@@ -4,8 +4,6 @@ from lib.localdimming.transform import *
 
 
 ## TODO, only YUV, RGB or Iin is not
-
-
 def getIcp_linear(Iin, LD):
     B, G, R = cv2.split(Iin)
     Y, U, V = rgbToyuv(R, G, B)
@@ -15,7 +13,7 @@ def getIcp_linear(Iin, LD):
     try:
         K = LD_max / LD
     except:
-        K = 0
+        K = 255.0
 
     Y1 = K * Y
     U1 = K * (U - 128) + 128
@@ -31,10 +29,8 @@ def getIcp_unlinear(Iin, LD):
     # LD_max = np.max(LD)
     LD_max = 255.0
     r = 2.2
-    try:
-        K = (LD_max / LD) ** (1 / r)
-    except:
-        K = 0      ##TODO
+    LD = np.where(LD==0.0,LD,LD+0.001)
+    K = (LD_max/ (LD+0.0001)) ** (1/r)      ##TODO
 
     Y1 = K * Y
     U1 = K * (U - 128) + 128
@@ -71,7 +67,6 @@ def getIcp_2steps(Iin, LD):
     R1, G1, B1 = yuvTorgb(Y2, U2, V2)
     Icp = cv2.merge([B1, G1, R1])
     return Icp
-
 
 
 def getIcp_log(Iin, LD):

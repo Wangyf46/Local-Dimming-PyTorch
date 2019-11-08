@@ -1,6 +1,7 @@
 import os
 import ipdb
 import torch
+import torch.nn as nn
 from torch.utils.data import DataLoader
 
 from config import cfg
@@ -15,6 +16,7 @@ def test_net(cfg, net):
 
     test_loader = DataLoader(listDataset,
                               batch_size=cfg.TEST_BZ,
+                              num_workers=4,
                               pin_memory=True)
 
     net.eval()
@@ -25,8 +27,8 @@ def test_net(cfg, net):
 
         Iin = blob['Iin'][0].numpy().transpose((1, 2, 0))
         LD = LDs[0].detach().cpu().numpy().squeeze(0) * 255
-        Icp = getIcp(Iin, LD, cfg.CP)
-        # Icp = blob['Icp'][0].numpy().transpose((1, 2, 0))  # unet
+        # Icp = getIcp(Iin, LD, cfg.CP)
+        Icp = blob['Icp'][0].numpy().transpose((1, 2, 0))  # unet
         Iout = getIout(Icp, LD, cfg.DISPLAY)
 
         if cfg.SAVE:
@@ -76,8 +78,13 @@ if __name__ == '__main__':
     # from lib.net.unet_up import UNet_Upsampling
     # net = UNet_Upsampling(1, 1)
 
-    from lib.net.edsr import EDSR
-    net = EDSR(1, 1)
+    # from lib.net.edsr import EDSR
+    # net = EDSR(1, 1)
+
+    from lib.net.resnet import RESNET
+    os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
+    net = RESNET(1, 1)
+    net = nn.DataParallel(net)
 
     if cfg.TEST_CKPT:
         net.load_state_dict(torch.load(cfg.TEST_CKPT))

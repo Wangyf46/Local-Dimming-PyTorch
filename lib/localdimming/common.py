@@ -37,15 +37,15 @@ def getBL(block, means):
     elif means == 'psnr':
         BL = getBL_psnr(block)
 
-    BL = np.where(BL < 0, 0.0, BL) * 1.0
-    BL = np.where(BL > 255, 255.0, BL) * 1.0
+    # BL = np.where(BL < 0, 0.0, BL) * 1.0
+    # BL = np.where(BL > 255, 255.0, BL) * 1.0
 
     return BL
 
 
 def getLD(BL, gray, means):
     if means == 'bma':
-        LD = getLD_bma(BL, gray).astype('float32')
+        LD = getLD_bma(BL, gray).astype('float64')
     elif means == 'interpolation':
         LD = getLD_interpolation(BL, gray)
     return LD

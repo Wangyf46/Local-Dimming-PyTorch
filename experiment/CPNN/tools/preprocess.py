@@ -21,9 +21,9 @@ def parse_args():
 
 def main(args):
 	if not os.path.isdir(args.LDpath):
-            os.makedirs((args.LDpath))
+		os.makedirs((args.LDpath))
 	name_list = os.listdir(args.srcpath)
-        for idx in range(len(name_list)):
+	for idx in range(len(name_list)):
 		fname = os.path.join(args.srcpath, name_list[idx])
 
 		## Iin(BGR): float32-[0.0-255.0]

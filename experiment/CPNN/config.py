@@ -53,20 +53,6 @@ class Configuration():
     def __check(self):
         if not torch.cuda.is_available():
             raise ValueError('config.py: cuda is not available')
-        if self.PERIOD == 'train':
-            if not os.path.isdir(self.TRAIN_LOG_DIR):
-                os.makedirs((self.TRAIN_LOG_DIR))
-            if not os.path.isdir(self.TRAIN_CKPT_DIR):
-                os.makedirs((self.TRAIN_CKPT_DIR))
-            self.TRAIN_RECORD_FILE = open(os.path.join(self.EXP, self.DATE, 'log', 'record.txt'), 'w')
-        else:
-            if not os.path.isdir(self.LD_SAVE_DIR):
-                os.makedirs((self.LD_SAVE_DIR))
-            if not os.path.isdir(self.Icp_SAVE_DIR):
-                os.makedirs((self.Icp_SAVE_DIR))
-            if not os.path.isdir(self.Iout_SAVE_DIR):
-                os.makedirs((self.Iout_SAVE_DIR))
-            self.TEST_RECORD_FILE = open(os.path.join(self.EXP, 'output', self.DATE, 'record.txt'), 'w')
 
     def __add_path(self, path):
         if path not in sys.path:

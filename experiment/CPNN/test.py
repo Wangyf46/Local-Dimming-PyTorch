@@ -88,14 +88,21 @@ if __name__ == '__main__':
 
     net = UNet(3, 3)
 
+    if cfg.PERIOD == 'TEST':
+        if not os.path.isdir(cfg.LD_SAVE_DIR):
+            os.makedirs((cfg.LD_SAVE_DIR))
+        if not os.path.isdir(cfg.Icp_SAVE_DIR):
+            os.makedirs((cfg.Icp_SAVE_DIR))
+        if not os.path.isdir(cfg.Iout_SAVE_DIR):
+            os.makedirs((cfg.Iout_SAVE_DIR))
+        cfg.TEST_RECORD_FILE = open(os.path.join(cfg.EXP, 'output', cfg.DATE, 'record.txt'), 'w')
+
     if cfg.TEST_CKPT:
         net.load_state_dict(torch.load(cfg.TEST_CKPT))
         print('Model loaded from {}'.format(cfg.TEST_CKPT))
         print(torch.load(cfg.TEST_CKPT))
-        ipdb.set_trace()
+
     if cfg.GPU:
         net.cuda()
-
-
 
     test_net(cfg, net)

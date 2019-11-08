@@ -97,6 +97,13 @@ if __name__ == '__main__':
     net = UNet(3, 3)
     # net = nn.DataParallel(net)
 
+    if cfg.PERIOD == 'train':
+        if not os.path.isdir(cfg.TRAIN_LOG_DIR):
+            os.makedirs((cfg.TRAIN_LOG_DIR))
+        if not os.path.isdir(cfg.TRAIN_CKPT_DIR):
+            os.makedirs((cfg.TRAIN_CKPT_DIR))
+        cfg.TRAIN_RECORD_FILE = open(os.path.join(cfg.EXP, cfg.DATE, 'log', 'record.txt'), 'w')
+
     if cfg.TRAIN_CKPT:
         net.load_state_dict(torch.load(cfg.TRAIN_CKPT))
         print('Model loaded from {}'.format(cfg.TRAIN_CKPT))

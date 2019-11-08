@@ -48,7 +48,7 @@ class Configuration():
         self.Iout_SAVE_DIR = os.path.join(self.EXP, 'output', self.DATE, 'Iout')
 
         self.__check()
-        self.__add_path('/home/wangyf/codes/Local-Dimming-PyTorch')
+        self.__add_path('/home/wangyf/codes/Local-Dimming-PyTorch/')
 
     def __check(self):
         if not torch.cuda.is_available():

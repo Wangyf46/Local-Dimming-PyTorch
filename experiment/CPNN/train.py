@@ -1,14 +1,15 @@
 import os
 import sys
 import time
-import ipdb
+import pdb
 import torch
+import argparse
+import shutil
 import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from tensorboardX import SummaryWriter
-#### 
 
 from config import cfg
 from DIV2K import DIV2K
@@ -18,8 +19,8 @@ from lib.utils import *
 
 
 def train_net(cfg, net):
-    if cfg.TRAIN_TBLOG:
-        tblogger = SummaryWriter(cfg.TRAIN_LOG_DIR)
+    tblogger = SummaryWriter(cfg.TRAIN_LOG_DIR)
+    log_file = open(cfg.LOG_FILE, 'w')
 
     listDataset = DIV2K(cfg)      ## TODO
 
@@ -74,7 +75,7 @@ def train_net(cfg, net):
             print_str += 'Data time {data_time.cur:.3f}({data_time.avg:.3f})\t'.format(data_time=data_time)
             print_str += 'Batch time {batch_time.cur:.3f}({batch_time.avg:.3f})\t'.format(batch_time=batch_time)
             print_str += 'Loss {loss.cur:.4f}({loss.avg:.4f})\t'.format(loss=losses)
-            log_print(print_str, cfg.TRAIN_RECORD_FILE, color="green", attrs=["bold"])
+            log_print(print_str, log_file, color="green", attrs=["bold"])
 
             ## torch.float32-CHW-[0.0-1.0]
             tblogger.add_scalar('loss', losses.avg, itr)
@@ -86,33 +87,52 @@ def train_net(cfg, net):
         torch.save(net.state_dict(), save_path)
         print('%s has been saved' % save_path)
 
+def parse_args():
+    parser = argparse.ArgumentParser(description='MMDet test detector')
+    parser.add_argument('period', type=str, choices=['trainval', 'test'],
+                        help='run mode')
+    parser.add_argument('config', type=str,
+                        help='config file')
+    return parser.parse_args()
+
 
 if __name__ == '__main__':
-    os.environ['CUDA_VISIBLE_DEVICES'] = cfg.GPU_ID
-
     ## 固定随机种子
+    seed = time.time()
     torch.manual_seed(0)
     torch.cuda.manual_seed(0)
 
-    net = UNet(3, 3)
-    # net = nn.DataParallel(net)
+    torch.backends.cudnn.benchmark = True
+    torch.backends.cudnn.deterministic = False
+    torch.backends.cudnn.enabled = True
 
-    if cfg.PERIOD == 'train':
+    if args.period == 'train':
+        cfg.LOG_FILE = cfg.WORK_DIR + '/' + cfg.DATE + '.txt'
+        if not os.path.isdir(cfg.WORK_DIR):
+            os.makedirs((cfg.WORK_DIR))
         if not os.path.isdir(cfg.TRAIN_LOG_DIR):
             os.makedirs((cfg.TRAIN_LOG_DIR))
-        if not os.path.isdir(cfg.TRAIN_CKPT_DIR):
-            os.makedirs((cfg.TRAIN_CKPT_DIR))
-        cfg.TRAIN_RECORD_FILE = open(os.path.join(cfg.EXP, cfg.DATE, 'log', 'record.txt'), 'w')
 
+    dstfile = cfg.WORK_DIR + '/config.py'
+    shutil.copyfile(args.config, dstfile)
+
+    if cfg.MODEL == 'Unet':
+        from src.Unet import Unet
+        model = UNet(3, 3)
+
+    # net = nn.DataParallel(net)
     if cfg.TRAIN_CKPT:
-        net.load_state_dict(torch.load(cfg.TRAIN_CKPT))
+        model.load_state_dict(torch.load(cfg.TRAIN_CKPT))
         print('Model loaded from {}'.format(cfg.TRAIN_CKPT))
-    if cfg.GPU:
-        net.cuda()
+
+    os.environ['CUDA_VISILBE_DEVICES'] = args.GPU_ID
+    model = nn.DataParallel(model)  ## dist train
+    model = model.cuda()
+
     try:
-        train_net(cfg, net)
+        train_net(cfg, model)
     except KeyboardInterrupt:
-        torch.save(net.state_dict(), cfg.EXP + 'INTERRUPTED.pth')
+        torch.save(model.state_dict(), cfg.EXP + 'INTERRUPTED.pth')
         print('Saved interrupt')
         try:
             sys.exit(0)

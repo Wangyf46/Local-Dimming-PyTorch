@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ## TODO:
-srcpath='/home/wangyf/datasets/DIV2K/DIV2K_valid_HR_aug/'
-LDpath='/home/wangyf/codes/Local-Dimming-PyTorch/CPNN/DIV2K/lut-bma-vaild/LDs/'
+srcpath='/data/workspace/DIV2K-aug/DIV2K_train_HR/'
+LDpath='/data/workspace/DIV2K-aug/lut-bma/train-LDs/'
 
-python tools/preprocess.py $srcpath $LDpath
+python preprocess.py $srcpath $LDpath
